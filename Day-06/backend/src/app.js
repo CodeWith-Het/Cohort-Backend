@@ -1,8 +1,12 @@
 const express = require("express");
 const userDataModel = require("./models/userData.models");
+const cors = require("cors")
 const app = express();
+const path = require("path") 
 
 app.use(express.json());
+app.use(cors())
+app.use(express.static("./public"))
 
 app.post("/user", async (req, res) => {
   const { name, surname, age, course } = req.body;
@@ -44,11 +48,11 @@ app.delete("/user/:_id", async (req, res) => {
 
 app.patch("/user/:_id", async (req, res) => {
   const { _id } = req.params;
-  const { course } = req.body;
+  const { name,surname,age,course } = req.body;
 
   const userDataModify = await userDataModel.updateOne(
     { _id },
-    { $set: { course } },
+    { $set: { name,surname,age,course } },
   );
 
   res.status(200).json({
@@ -56,5 +60,9 @@ app.patch("/user/:_id", async (req, res) => {
     userDataModify,
   });
 });
+
+app.use("*name", (req,res) => {
+  res.sendFile(path.join(__dirname,"../public/index.html"));
+})
 
 module.exports = app;
