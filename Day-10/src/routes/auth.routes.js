@@ -1,6 +1,7 @@
 const express = require("express")
 const jwt = require("jsonwebtoken")
 const userSchemaModels = require("../models/user.models")
+
 const authRouter = express.Router()
 
 authRouter.post("/register",async (req, res) => {
@@ -37,5 +38,13 @@ authRouter.post("/register",async (req, res) => {
     })
     
 })
+
+authRouter.post("/protected", (req, res) => {
+  console.log("protected your account", req.cookies);
+
+  res.status(200).json({
+    message:"this is protected Account"
+  })
+});
 
 module.exports=authRouter
